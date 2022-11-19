@@ -16,7 +16,7 @@ public class MainMenuFrame extends JFrame {
         play.setBackground(Color.WHITE);
         add(play);
         JButton exit = new JButton("Exit");
-        exit.setBounds(300,600,300,150);
+        exit.setBounds(300,300,300,150);
         exit.setBackground(Color.WHITE);
         add(exit);
 
@@ -27,9 +27,9 @@ public class MainMenuFrame extends JFrame {
             }
         });
 
-        play.addActionListener(new ActionListener() {
+        exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new GameFrame();
+                System.exit(0);
             }
         });
     }

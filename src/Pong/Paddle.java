@@ -58,7 +58,16 @@ public class Paddle extends Rectangle {
                 }
         }
     }
-    public void keyTyped(KeyEvent e) {
+
+    public void draw(Graphics g){
+        switch(id){
+            case 1:
+                g.setColor(Color.WHITE);
+                g.fillRect(x,y,width,height);
+            case 2:
+                g.setColor(Color.WHITE);
+                g.fillRect(x,y,width,height);
+        }
     }
 
     public void move(){
