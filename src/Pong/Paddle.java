@@ -1,20 +1,19 @@
 package Pong;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Paddle{
+public class Paddle {
 
     int x;
     int y;
     int width;
     int height;
-    int id;
 
-    public Paddle( int width, int height, int id){
+    public Paddle( int width, int height){
         this.width = width;
         this.height = height;
-        this.id = id;
     }
 
 
@@ -33,5 +32,4 @@ public class Paddle{
     public void setY(int y) {
         this.y = y;
     }
-
 }
