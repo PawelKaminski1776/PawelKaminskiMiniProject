@@ -2,12 +2,10 @@ package Pong;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
+public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
     final int PONG_WIDTH=1000;
     final int PONG_HEIGHT=PONG_WIDTH*5/9;
     final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
@@ -21,7 +19,7 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
     final int LABEL_WIDTH=200;
     final int LABEL_HEIGHT=LABEL_WIDTH/3;
 
-    int BallxDirection=-1, BallyDirection=1, speed=2;
+    int BallxDirection=-1, BallyDirection=1, AIPaddleDirection=0;
 
     int player1score, player2score;
 
@@ -34,7 +32,7 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
 
     JLabel label;
 
-    public TwoPlayerPanel() {
+    public OnePlayerPanel() {
         newPaddles();
         newBall();
 
@@ -94,7 +92,7 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
 
     public void Collision(){
         //Collision for paddles
-       if(p1.getY()<=0){
+        if(p1.getY()<=0){
             p1.setY(0);
         }
         if(p1.getY()+PADDLE_HEIGHT>=PONG_HEIGHT){
@@ -150,6 +148,16 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
                 setBallyDirection(2);
             }
         }
+        // AI paddle
+        if(b1.getBally()==p2.getY()){
+            setAIPaddleDirection(0);
+        }
+        if(b1.getBally()>p2.getY()){
+            setAIPaddleDirection(2);
+        }
+        if(b1.getBally()<p2.getY()+PADDLE_HEIGHT){
+            setAIPaddleDirection(-2);
+        }
     }
 
     public void setBallxDirection(int ballxDirection) {
@@ -160,6 +168,10 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
         BallyDirection = ballyDirection;
     }
 
+    public void setAIPaddleDirection(int AIPaddleDirection) {
+        this.AIPaddleDirection = AIPaddleDirection;
+    }
+
     public int getBallxDirection() {
         return BallxDirection;
     }
@@ -168,7 +180,12 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
         return BallyDirection;
     }
 
+    public int getAIPaddleDirection() {
+        return AIPaddleDirection;
+    }
+
     public void Move(){
+        p2.setY(p2.getY()+getAIPaddleDirection());
         b1.setBallx(b1.getBallx()+getBallxDirection());
         b1.setBally(b1.getBally()+getBallyDirection());
         repaint();
@@ -203,8 +220,6 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP -> p1.setY(p1.getY() - 10);
             case KeyEvent.VK_DOWN -> p1.setY(p1.getY() + 10);
-            case KeyEvent.VK_W -> p2.setY(p2.getY() - 10);
-            case KeyEvent.VK_S -> p2.setY(p2.getY() + 10);
         }
         Collision();
         repaint();
@@ -217,3 +232,4 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
     }
 
 }
+
