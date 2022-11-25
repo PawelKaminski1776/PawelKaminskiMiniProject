@@ -4,7 +4,7 @@ public class Ball {
     int Ballx;
     int Bally;
     int diameter;
-    int BallSpeed;
+
 
     public Ball(int diameter){
         this.diameter=diameter;

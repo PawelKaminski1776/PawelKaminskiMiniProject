@@ -5,15 +5,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenuFrame extends JFrame {
-    static final int width = 1000;
-    static final int height = width*5/9;
+    private final int width = 1000;
+    private final int height = width*5/9;
 
-    static final int Bwidth = 200;
-    static final int Bheight = Bwidth/2;
+    private final int Bwidth = 200;
+    private final int Bheight = Bwidth/2;
 
-    static final int W_halfway=(width/2)-(Bwidth/2);
+    private final int W_halfway=(width/2)-(Bwidth/2);
 
-    static final int H_halfway=(height/2)-(Bheight/2);
+    private final int H_halfway=(height/2)-(Bheight/2);
     JButton oneplayer, twoplayer,leaderboard, exit;
     public MainMenuFrame(){
         this.setTitle("Pong");

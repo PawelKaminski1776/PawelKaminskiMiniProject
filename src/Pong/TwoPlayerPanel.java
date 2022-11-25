@@ -8,31 +8,58 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
-    final int PONG_WIDTH=1000;
-    final int PONG_HEIGHT=PONG_WIDTH*5/9;
-    final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
 
-    final int PADDLE_HEIGHT = 120;
+    /**
+     * Set JFrame Size and Dimension Variables
+     */
+    private final int PONG_WIDTH=1000;
+    private final int PONG_HEIGHT=PONG_WIDTH*5/9;
+    private final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
 
-    final int PADDLE_WIDTH = PADDLE_HEIGHT/6;
+    /**
+     * Set Paddle Size and Ball Size Variables
+     */
 
-    final int BALL_DIAMETER = 15;
+    private final int PADDLE_HEIGHT = 120;
 
-    final int LABEL_WIDTH=200;
-    final int LABEL_HEIGHT=LABEL_WIDTH/3;
+    private final int PADDLE_WIDTH = PADDLE_HEIGHT/6;
 
-    int BallxDirection=-1, BallyDirection=1, speed=2;
+    private final int BALL_DIAMETER = 15;
 
-    int player1score, player2score;
+    /**
+     * JLabel size variables
+     */
 
-    Paddle p1,p2;
+    private final int LABEL_WIDTH=200;
+    private final int LABEL_HEIGHT=LABEL_WIDTH/3;
 
-    Ball b1;
-    Thread PongGame;
+    /**
+     * Set x and y direction variables
+     */
 
-    Boolean running;
+    private int BallxDirection=-1, BallyDirection=1;
 
-    JLabel label;
+    /**
+     * Set score variables
+     */
+    private int player1score, AIscore;
+
+    /**
+     * Set paddle and ball variables
+     */
+
+    private Paddle p1,p2;
+
+    private Ball b1;
+
+    /**
+     * Set Thread boolean and JLabel variables
+     */
+    private Thread PongGame;
+
+    private Boolean running;
+
+    private JLabel label;
 
     public TwoPlayerPanel() {
         newPaddles();
@@ -69,14 +96,14 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
     }
 
     public void SomebodyScored(){
-        label.setText(player1score + " " + player2score);
+        label.setText(player1score + " " + AIscore);
         if(player1score==10){
             running=false;
             JOptionPane.showMessageDialog(null,"Player 1 Has won");
             setVisible(false);
             new MainMenuFrame();
         }
-        if(player2score==10){
+        if(AIscore==10){
             running=false;
             JOptionPane.showMessageDialog(null,"Player 2 Has won");
             setVisible(false);
@@ -113,7 +140,7 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
         if(b1.getBallx()<=0){
             newPaddles();
             newBall();
-            player2score++;
+            AIscore++;
         }
         if(b1.getBallx()>=PONG_WIDTH-BALL_DIAMETER){
             newPaddles();
@@ -175,6 +202,10 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
     }
 
     public void run() {
+        /**
+         * Code from https://github.com/imlakshay08/Java-Pong-Game
+         * lines 115 to 131, GamePanel.java
+         */
         long lastcheck = System.nanoTime();
         double fpscounter=100;
         double timeBetweenFrames = 1000000000/fpscounter;
@@ -195,8 +226,12 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
+
+    /**
+     *
+     * @param e the event to be processed
+     */
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -205,6 +240,10 @@ public class TwoPlayerPanel extends JPanel implements Runnable, KeyListener{
             case KeyEvent.VK_DOWN -> p1.setY(p1.getY() + 10);
             case KeyEvent.VK_W -> p2.setY(p2.getY() - 10);
             case KeyEvent.VK_S -> p2.setY(p2.getY() + 10);
+            case KeyEvent.VK_ESCAPE -> {
+                setVisible(false);
+                new MainMenuFrame();
+            }
         }
         Collision();
         repaint();

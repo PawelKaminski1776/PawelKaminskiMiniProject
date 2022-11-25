@@ -6,10 +6,10 @@ import java.awt.event.*;
 
 public class Paddle {
 
-    int x;
-    int y;
-    int width;
-    int height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
     public Paddle( int width, int height){
         this.width = width;

@@ -4,11 +4,40 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+/*****************************************************
+
+ * Code from a fellow student (include this comment for clarity) * Title: Java-Pong-Game/GamePanel.java, lines 227-245
+
+ * Author: Lakshay Tyagi
+
+ * Site owner/sponsor: github.com
+
+ * Date: 19/09/2022
+
+ * Code version: * Availability: https://github.com/imlakshay08/Java-Pong-Game/blob/main/GamePanel.java
+
+ (Accessed 22 November 2022)
+
+
+ *****************************************************/
+
+//
+/**
+ * A single-player pong game java class that extends JPanel and implements Runnable and KeyListener.
+ *
+ */
 
 public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
+    /**
+     * Set JFrame Size and Dimension Variables
+     */
     private final int PONG_WIDTH=1000;
     private final int PONG_HEIGHT=PONG_WIDTH*5/9;
     private final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
+
+    /**
+     * Set Paddle Size and Ball Size Variables
+     */
 
     private final int PADDLE_HEIGHT = 120;
 
@@ -16,18 +45,43 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
 
     private final int BALL_DIAMETER = 15;
 
+    /**
+     * JLabel size variables
+     */
+
     private final int LABEL_WIDTH=200;
     private final int LABEL_HEIGHT=LABEL_WIDTH/3;
 
+    /**
+     * Set x and y direction variables
+     */
+
+
     private int BallxDirection=-1, BallyDirection=1, AIPaddleDirection=0;
 
-    private int player1score, player2score, wins;
+    /**
+     * Set score variables
+     */
+
+    private int player1score, player2score;
+
+    /**
+     * Set paddle and ball variables
+     */
 
     private Paddle p1,p2;
 
     private Ball b1;
 
+    /**
+     * Set Player Serialization variable
+     */
+
     private PlayerSerialization TopPlayers;
+
+    /**
+     * Set Thread boolean and JLabel variables
+     */
     private Thread PongGame;
 
     private Boolean running;
@@ -39,8 +93,13 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
     private String name;
 
 
-
+    /**
+     * Constructor class creating the single player pong game
+     */
     public OnePlayerPanel() {
+        /**
+         * Player Name Validation
+         */
         name = JOptionPane.showInputDialog(null, "Please enter your name");
         if(name.length()>15){
             JOptionPane.showMessageDialog(null,"Error Please ensure name isn't longer than 15 characters");
@@ -48,6 +107,9 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
             new MainMenuFrame();
         }
         else {
+            /**
+             * Player name Serialization
+             */
             TopPlayers = new PlayerSerialization();
             player = new Player(name);
             player.setName(name);
@@ -61,6 +123,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
             setFocusable(true);
             setPreferredSize(PONG_SCREEN);
 
+            /**
+             * Start Thread and set JLabel
+             */
+
             PongGame = new Thread(this);
             PongGame.start();
             running = true;
@@ -71,11 +137,18 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
+    /**
+     * Create a ball and set the coords
+     */
     public void newBall(){
         b1 = new Ball(BALL_DIAMETER);
         b1.setBally((PONG_HEIGHT/2)-(BALL_DIAMETER/2));
         b1.setBallx((PONG_WIDTH/2)-(BALL_DIAMETER/2));
     }
+
+    /**
+     * Create paddles and set the coords
+     */
 
     public void newPaddles(){
         p1 = new Paddle(PADDLE_WIDTH,PADDLE_HEIGHT);
@@ -85,6 +158,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         p2.setY((PONG_HEIGHT/2)-(PADDLE_HEIGHT/2));
         p2.setX(PONG_WIDTH-PADDLE_WIDTH);
     }
+
+    /**
+     * Method if somebody scores or wins the game
+     */
 
     public void SomebodyScored(){
         label.setText(player1score + " " + player2score);
@@ -104,6 +181,11 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
+    /**
+     * Graphics code for movement
+     * @param g the <code>Graphics</code> object to protect
+     */
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         g.setColor(Color.WHITE);
@@ -111,6 +193,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         g.fillRect(p2.getX(),p2.getY(),PADDLE_WIDTH,PADDLE_HEIGHT);
         g.fillOval(b1.getBallx(), b1.getBally(), BALL_DIAMETER,BALL_DIAMETER);
     }
+
+    /**
+     * Collision code for ball and paddles
+     */
 
     public void Collision(){
         //Collision for paddles
@@ -182,6 +268,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
+    /**
+     * set and get methods for x, y ball and paddle directions
+     */
+
     public void setBallxDirection(int ballxDirection) {
         BallxDirection = ballxDirection;
     }
@@ -206,6 +296,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         return AIPaddleDirection;
     }
 
+    /**
+     * Move method for seting the movements
+     */
+
     public void Move(){
         p2.setY(p2.getY()+getAIPaddleDirection());
         b1.setBallx(b1.getBallx()+getBallxDirection());
@@ -213,7 +307,15 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         repaint();
     }
 
+    /**
+     * Run for fps and speed of game
+     */
+
     public void run() {
+        /**
+         * Code from https://github.com/imlakshay08/Java-Pong-Game
+         * lines 115 to 131, GamePanel.java
+         */
         long lastcheck = System.nanoTime();
         double fpscounter=100;
         double timeBetweenFrames = 1000000000/fpscounter;
@@ -232,6 +334,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
+    /**
+     * KeyListener for player controls
+     */
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -242,6 +348,10 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP -> p1.setY(p1.getY() - 10);
             case KeyEvent.VK_DOWN -> p1.setY(p1.getY() + 10);
+            case KeyEvent.VK_ESCAPE -> {
+                setVisible(false);
+                new MainMenuFrame();
+            }
         }
         Collision();
         repaint();
@@ -252,6 +362,11 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
     public void keyReleased(KeyEvent e) {
 
     }
+
+    /**
+     *
+     * Set and Get for player name
+     */
 
     @Override
     public void setName(String name) {
