@@ -1,6 +1,8 @@
 package Pong;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private String name;
     private int wins;
     public Player(String name){
