@@ -6,49 +6,69 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
-    final int PONG_WIDTH=1000;
-    final int PONG_HEIGHT=PONG_WIDTH*5/9;
-    final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
+    private final int PONG_WIDTH=1000;
+    private final int PONG_HEIGHT=PONG_WIDTH*5/9;
+    private final Dimension PONG_SCREEN = new Dimension(PONG_WIDTH, PONG_HEIGHT);
 
-    final int PADDLE_HEIGHT = 120;
+    private final int PADDLE_HEIGHT = 120;
 
-    final int PADDLE_WIDTH = PADDLE_HEIGHT/6;
+    private final int PADDLE_WIDTH = PADDLE_HEIGHT/6;
 
-    final int BALL_DIAMETER = 15;
+    private final int BALL_DIAMETER = 15;
 
-    final int LABEL_WIDTH=200;
-    final int LABEL_HEIGHT=LABEL_WIDTH/3;
+    private final int LABEL_WIDTH=200;
+    private final int LABEL_HEIGHT=LABEL_WIDTH/3;
 
-    int BallxDirection=-1, BallyDirection=1, AIPaddleDirection=0;
+    private int BallxDirection=-1, BallyDirection=1, AIPaddleDirection=0;
 
-    int player1score, player2score;
+    private int player1score, player2score, wins;
 
-    Paddle p1,p2;
+    private Paddle p1,p2;
 
-    Ball b1;
-    Thread PongGame;
+    private Ball b1;
 
-    Boolean running;
+    private PlayerSerialization TopPlayers;
+    private Thread PongGame;
 
-    JLabel label;
+    private Boolean running;
+
+    private JLabel label;
+
+    private Player player;
+
+    private String name;
+
+
 
     public OnePlayerPanel() {
-        newPaddles();
-        newBall();
+        name = JOptionPane.showInputDialog(null, "Please enter your name");
+        if(name.length()>15){
+            JOptionPane.showMessageDialog(null,"Error Please ensure name isn't longer than 15 characters");
+            this.setVisible(false);
+            new MainMenuFrame();
+        }
+        else {
+            TopPlayers = new PlayerSerialization();
+            player = new Player(name);
+            player.setName(name);
 
-        addKeyListener(this);
+            newPaddles();
+            newBall();
 
-        setBackground(Color.black);
-        setFocusable(true);
-        setPreferredSize(PONG_SCREEN);
+            addKeyListener(this);
 
-        PongGame = new Thread(this);
-        PongGame.start();
-        running=true;
-        label = new JLabel("0" + " " + "0");
-        label.setBackground(Color.WHITE);
-        label.setBounds(PONG_WIDTH-LABEL_WIDTH,PONG_HEIGHT-LABEL_HEIGHT,PONG_WIDTH,PONG_HEIGHT);
-        add(label);
+            setBackground(Color.black);
+            setFocusable(true);
+            setPreferredSize(PONG_SCREEN);
+
+            PongGame = new Thread(this);
+            PongGame.start();
+            running = true;
+            label = new JLabel("0" + " " + "0");
+            label.setForeground(Color.WHITE);
+            label.setBounds(PONG_WIDTH - LABEL_WIDTH, PONG_HEIGHT - LABEL_HEIGHT, PONG_WIDTH, PONG_HEIGHT);
+            add(label);
+        }
     }
 
     public void newBall(){
@@ -68,16 +88,18 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
 
     public void SomebodyScored(){
         label.setText(player1score + " " + player2score);
-        if(player1score==10){
+        if(player1score==1){
+            player.setWins(player.getWins()+1);
+            TopPlayers.PlayerSerialization(player);
+            this.setVisible(false);
             running=false;
             JOptionPane.showMessageDialog(null,"Player 1 Has won");
-            setVisible(false);
             new MainMenuFrame();
         }
         if(player2score==10){
+            this.setVisible(false);
             running=false;
             JOptionPane.showMessageDialog(null,"Player 2 Has won");
-            setVisible(false);
             new MainMenuFrame();
         }
     }
@@ -230,6 +252,17 @@ public class OnePlayerPanel extends JPanel implements Runnable, KeyListener {
     public void keyReleased(KeyEvent e) {
 
     }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
 
 }
 
